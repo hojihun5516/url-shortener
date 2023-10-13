@@ -27,6 +27,8 @@ dependencies {
 	implementation("io.github.oshai:kotlin-logging-jvm:5.0.1")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("com.h2database:h2:2.2.224") // docker로 mysql 띄우기 전 임시 db
 	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
