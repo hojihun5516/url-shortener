@@ -28,5 +28,10 @@ class ManagedCache(
         }
     }
 
+    fun increment(key: String, delta: Long = 1L): Int {
+        val incrementedValue = valueOperations.increment(key, delta)
+        return incrementedValue?.toInt() ?: 1
+    }
+
     data class CacheValue<T>(val value: T)
 }
