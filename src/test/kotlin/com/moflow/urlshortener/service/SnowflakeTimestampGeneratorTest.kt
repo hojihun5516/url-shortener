@@ -25,7 +25,7 @@ class SnowflakeTimestampGeneratorTest {
         mockkStatic(Instant::class)
         every { Instant.now() } returns instant
 
-        val expected = (currentMillis - epoch) and ((1L shl timestampBits) - 1)
+        val expected = ((currentMillis - epoch) and ((1L shl timestampBits) - 1)).toString()
 
         // Act
         val actual = sut.currentTimestamp()
