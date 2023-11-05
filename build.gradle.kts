@@ -29,6 +29,7 @@ dependencies {
 	implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("com.h2database:h2:2.2.224") // docker로 mysql 띄우기 전 임시 db
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -44,6 +45,12 @@ tasks.withType<KotlinCompile> {
 		freeCompilerArgs += "-Xjsr305=strict"
 		jvmTarget = "17"
 	}
+}
+
+allOpen {
+	annotation("jakarta.persistence.Entity")
+	annotation("jakarta.persistence.Embeddable")
+	annotation("jakarta.persistence.MappedSuperclass")
 }
 
 tasks.withType<Test> {
