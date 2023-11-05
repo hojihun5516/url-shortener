@@ -1,6 +1,8 @@
 spring:
   application:
     name: url-shortener
+    data-center-id: 00001
+    server-id: 00001
   data:
     redis:
       host: localhost
