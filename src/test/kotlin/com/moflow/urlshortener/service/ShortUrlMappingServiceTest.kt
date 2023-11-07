@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 class ShortUrlMappingServiceTest(
     @MockK private val shortUrlGenerator: ShortUrlGenerator,
     @MockK private val shortUrlRepository: ShortUrlRepository,
+    @MockK private val shortUrlFindService: ShortUrlFindService,
 ) {
     @InjectMockKs
     private lateinit var sut: ShortUrlMappingService
@@ -29,17 +30,15 @@ class ShortUrlMappingServiceTest(
         val shortUrl = ShortUrl(originUrl, shortenUrl)
         val expected = shortUrl.toShortUrlDto()
 
-        every { shortUrlRepository.findByOriginUrl(originUrl) } returns shortUrl
+        every { shortUrlFindService.findByOriginUrl(originUrl) } returns expected
 
         // Act
         val actual = sut.mapShortUrl(originUrl)
 
         // Assert
-        assertThat(actual)
-            .hasFieldOrPropertyWithValue("originUrl", expected.originUrl)
-            .hasFieldOrPropertyWithValue("shortUrl", expected.shortUrl)
+        assertThat(actual).isEqualTo(expected)
         verify {
-            shortUrlRepository.findByOriginUrl(originUrl)
+            shortUrlFindService.findByOriginUrl(originUrl)
             shortUrlGenerator wasNot called
         }
     }
@@ -52,7 +51,7 @@ class ShortUrlMappingServiceTest(
         val shortUrl = ShortUrl(originUrl, shortenUrl)
         val expected = shortUrl.toShortUrlDto()
 
-        every { shortUrlRepository.findByOriginUrl(originUrl) } returns null
+        every { shortUrlFindService.findByOriginUrl(originUrl) } returns null
         every { shortUrlGenerator.generate() } returns shortenUrl
         every { shortUrlRepository.save(any()) } returns shortUrl
 
@@ -64,7 +63,7 @@ class ShortUrlMappingServiceTest(
             .hasFieldOrPropertyWithValue("originUrl", expected.originUrl)
             .hasFieldOrPropertyWithValue("shortUrl", expected.shortUrl)
         verify {
-            shortUrlRepository.findByOriginUrl(originUrl)
+            shortUrlFindService.findByOriginUrl(originUrl)
             shortUrlGenerator.generate()
             shortUrlRepository.save(any())
         }

@@ -5,16 +5,19 @@ import com.moflow.urlshortener.dto.ShortUrlDto
 import com.moflow.urlshortener.extension.ShortUrlExtension.toShortUrlDto
 import com.moflow.urlshortener.repository.ShortUrlRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional
 class ShortUrlMappingService(
+    private val shortUrlFindService: ShortUrlFindService,
     private val shortUrlGenerator: ShortUrlGenerator,
     private val shortUrlRepository: ShortUrlRepository,
 ) {
     fun mapShortUrl(originUrl: String): ShortUrlDto {
-        val existingShortUrl = shortUrlRepository.findByOriginUrl(originUrl)
-        if (existingShortUrl != null) {
-            return existingShortUrl.toShortUrlDto()
+        val existsShortUrl = shortUrlFindService.findByOriginUrl(originUrl)
+        if(existsShortUrl !=null ){
+            return existsShortUrl
         }
 
         val shortenUrl = shortUrlGenerator.generate()
