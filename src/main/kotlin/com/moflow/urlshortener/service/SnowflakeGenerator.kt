@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service
 class SnowflakeGenerator(
     private val managedCache: ManagedCache,
     private val snowflakeTimestampGenerator: SnowflakeTimestampGenerator,
-    @Value("spring.application.data-center-id")
+    @Value("\${spring.application.data-center-id}")
     private val dataCenterId: String,
-    @Value("spring.application.name")
+    @Value("\${spring.application.name}")
     private val appName: String,
-    @Value("spring.application.server-id")
+    @Value("\${spring.application.server-id}")
     private val serverId: String,
 ) {
     fun generate(): String {
