@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.moflow.urlshortener.dto.ShortUrlCreateRequest
 import com.moflow.urlshortener.dto.ShortUrlCreateResponse
 import com.moflow.urlshortener.dto.ShortUrlDto
+import com.moflow.urlshortener.service.OriginUrlFindService
 import com.moflow.urlshortener.service.ShortUrlMappingService
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -27,6 +28,7 @@ class ShortUrlControllerTest @Autowired constructor(
     private val mockMvc: MockMvc,
     private val objectMapper: ObjectMapper,
     @MockkBean private val shortUrlMappingService: ShortUrlMappingService,
+    @MockkBean private val originUrlFindService: OriginUrlFindService,
 ) {
 
     @Test
@@ -78,6 +80,9 @@ class ShortUrlControllerTest @Autowired constructor(
     fun `sut should redirect origin url when short url is given`() {
         // Arrange
         val shortUrl = "vixen1"
+        val originUrl = "https://naver.com"
+        val shortUrlDto = ShortUrlDto(originUrl, shortUrl)
+        every { originUrlFindService.findByShortUrl(shortUrl) } returns shortUrlDto
 
         // Act & Assert
         mockMvc.perform(
@@ -85,5 +90,9 @@ class ShortUrlControllerTest @Autowired constructor(
         )
             .andDo(print())
             .andExpect(status().is3xxRedirection)
+
+        verify {
+            originUrlFindService.findByShortUrl(shortUrl)
+        }
     }
 }
