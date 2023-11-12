@@ -3,6 +3,7 @@ package com.moflow.urlshortener.controller
 import com.moflow.urlshortener.dto.ShortUrlCreateRequest
 import com.moflow.urlshortener.dto.ShortUrlCreateResponse
 import com.moflow.urlshortener.extension.ShortUrlDtoExtension.toShortUrlCreateResponse
+import com.moflow.urlshortener.service.OriginUrlFindService
 import com.moflow.urlshortener.service.ShortUrlMappingService
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
@@ -14,12 +15,10 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.view.RedirectView
 
-
-
-
 @RestController
 class ShortUrlController(
-    private val shortUrlMappingService: ShortUrlMappingService
+    private val shortUrlMappingService: ShortUrlMappingService,
+    private val originUrlFindService: OriginUrlFindService,
 ) {
     @PostMapping("/short-url")
     @ResponseStatus(HttpStatus.CREATED)
@@ -28,15 +27,12 @@ class ShortUrlController(
         return shortUrlDto.toShortUrlCreateResponse()
     }
 
-    /**
-     * TODO
-     * Service 구현 후 url 변경
-     */
     @GetMapping("/redirect/{shortUrl}")
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     fun redirect(@PathVariable shortUrl: String): RedirectView {
+        val shortUrlDto = originUrlFindService.findByShortUrl(shortUrl)
         val redirectView = RedirectView()
-        redirectView.url = "https://www.naver.com"
+        redirectView.url = shortUrlDto.originUrl
         return redirectView;
     }
 }
