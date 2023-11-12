@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -70,5 +71,19 @@ class ShortUrlControllerTest @Autowired constructor(
         )
             .andDo(print())
             .andExpect(status().is4xxClientError)
+    }
+
+    @Test
+    @DisplayName("short url을 받아서 origin url로 redirect 한다")
+    fun `sut should redirect origin url when short url is given`() {
+        // Arrange
+        val shortUrl = "vixen1"
+
+        // Act & Assert
+        mockMvc.perform(
+            get("/redirect/$shortUrl")
+        )
+            .andDo(print())
+            .andExpect(status().is3xxRedirection)
     }
 }
