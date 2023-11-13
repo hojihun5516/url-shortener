@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
 class ShortUrlMappingServiceTest(
-    @MockK private val shortUrlGenerator: ShortUrlGenerator,
+    @MockK private val shortUrlKeyGenerator: ShortUrlKeyGenerator,
     @MockK private val shortUrlRepository: ShortUrlRepository,
     @MockK private val shortUrlFindService: ShortUrlFindService,
 ) {
@@ -26,8 +26,8 @@ class ShortUrlMappingServiceTest(
     fun `sut should return short url dto when origin url already map`() {
         // Arrange
         val originUrl = "https://temp.com/asdf"
-        val shortenUrl = "ade21CZ"
-        val shortUrl = ShortUrl(originUrl, shortenUrl)
+        val shortKey = "ade21CZ"
+        val shortUrl = ShortUrl(originUrl, shortKey)
         val expected = shortUrl.toShortUrlDto()
 
         every { shortUrlFindService.findByOriginUrl(originUrl) } returns expected
@@ -39,20 +39,20 @@ class ShortUrlMappingServiceTest(
         assertThat(actual).isEqualTo(expected)
         verify {
             shortUrlFindService.findByOriginUrl(originUrl)
-            shortUrlGenerator wasNot called
+            shortUrlKeyGenerator wasNot called
         }
     }
 
     @Test
-    fun `sut should map short url and origin url when origin url does not mapped`() {
+    fun `sut should map short key and origin url when origin url does not mapped`() {
         // Arrange
         val originUrl = "https://temp.com/asdf"
-        val shortenUrl = "ade21CZ"
-        val shortUrl = ShortUrl(originUrl, shortenUrl)
+        val shortKey = "ade21CZ"
+        val shortUrl = ShortUrl(originUrl, shortKey)
         val expected = shortUrl.toShortUrlDto()
 
         every { shortUrlFindService.findByOriginUrl(originUrl) } returns null
-        every { shortUrlGenerator.generate() } returns shortenUrl
+        every { shortUrlKeyGenerator.generate() } returns shortKey
         every { shortUrlRepository.save(any()) } returns shortUrl
 
         // Act
@@ -61,10 +61,10 @@ class ShortUrlMappingServiceTest(
         // Assert
         assertThat(actual)
             .hasFieldOrPropertyWithValue("originUrl", expected.originUrl)
-            .hasFieldOrPropertyWithValue("shortUrl", expected.shortUrl)
+            .hasFieldOrPropertyWithValue("shortKey", expected.shortKey)
         verify {
             shortUrlFindService.findByOriginUrl(originUrl)
-            shortUrlGenerator.generate()
+            shortUrlKeyGenerator.generate()
             shortUrlRepository.save(any())
         }
     }

@@ -2,7 +2,7 @@ package com.moflow.urlshortener.service
 
 import com.moflow.urlshortener.cache.ManagedCache
 import com.moflow.urlshortener.domain.ShortUrl
-import com.moflow.urlshortener.exception.Messages.ORIGIN_URL_NOT_FOUND_BY_SHORT_URL
+import com.moflow.urlshortener.exception.Messages.ORIGIN_URL_NOT_FOUND_BY_SHORT_KEY
 import com.moflow.urlshortener.exception.NotFoundException
 import com.moflow.urlshortener.repository.ShortUrlRepository
 import io.mockk.Called
@@ -29,20 +29,20 @@ class OriginUrlFindServiceTest(
 
     @Test
     @DisplayName("캐시에 데이터가 있다면, short url dto를 반환한다")
-    fun `sut should return short url dto when short url is given and cache is exists`() {
+    fun `sut should return short url dto when short key is given and cache is exists`() {
         // Arrange
         val originUrl = "https://ASDF.com"
-        val shortenUrl = "asdfxC2"
-        val redisKey = "short-url:$shortenUrl"
+        val shortKey = "asdfxC2"
+        val redisKey = "short-url:$shortKey"
         every { managedCache.get<String>(redisKey) } returns originUrl
 
         // Act
-        val actual = sut.findByShortUrl(shortenUrl)
+        val actual = sut.findByShortKey(shortKey)
 
         // Assert
         assertThat(actual)
             .hasFieldOrPropertyWithValue("originUrl", originUrl)
-            .hasFieldOrPropertyWithValue("shortUrl", shortenUrl)
+            .hasFieldOrPropertyWithValue("shortKey", shortKey)
 
         verify {
             shortUrlRepository wasNot Called
@@ -51,49 +51,49 @@ class OriginUrlFindServiceTest(
     }
 
     @Test
-    @DisplayName("캐시에 데이터가 없고, 등록된 short url이 있다면 short url dto를 반환한다")
-    fun `sut should return short url dto when short url is given and cache is not exists`() {
+    @DisplayName("캐시에 데이터가 없고, 등록된 short key가 있다면 short url dto를 반환한다")
+    fun `sut should return short url dto when short key is given and cache is not exists`() {
         // Arrange
         val originUrl = "https://ASDF.com"
-        val shortenUrl = "asdfxC2"
-        val redisKey = "short-url:$shortenUrl"
-        val shortUrl = ShortUrl(originUrl = originUrl, shortUrl = shortenUrl)
+        val shortKey = "asdfxC2"
+        val redisKey = "short-url:$shortKey"
+        val shortUrl = ShortUrl(originUrl = originUrl, shortKey = shortKey)
         every { managedCache.get<String>(redisKey) } returns null
-        every { shortUrlRepository.findByShortUrl(shortenUrl) } returns shortUrl
+        every { shortUrlRepository.findByShortKey(shortKey) } returns shortUrl
         justRun { managedCache.set(redisKey, originUrl, 5L, TimeUnit.DAYS) }
 
         // Act
-        val actual = sut.findByShortUrl(shortenUrl)
+        val actual = sut.findByShortKey(shortKey)
 
         // Assert
         assertThat(actual)
             .hasFieldOrPropertyWithValue("originUrl", originUrl)
-            .hasFieldOrPropertyWithValue("shortUrl", shortenUrl)
+            .hasFieldOrPropertyWithValue("shortKey", shortKey)
 
         verify {
-            shortUrlRepository.findByShortUrl(shortenUrl)
+            shortUrlRepository.findByShortKey(shortKey)
             managedCache.get<String>(redisKey)
             managedCache.set(redisKey, originUrl, 5L, TimeUnit.DAYS)
         }
     }
 
     @Test
-    @DisplayName("캐시에 데이터가 없고, 등록된 short url이 없다면 Exception을 발생시킨다")
-    fun `sut throw not found exception when short url is not exists`() {
+    @DisplayName("캐시에 데이터가 없고, 등록된 short key가 없다면 Exception을 발생시킨다")
+    fun `sut throw not found exception when short key is not exists`() {
         // Arrange
-        val shortenUrl = "asdfxC2"
-        val redisKey = "short-url:$shortenUrl"
+        val shortKey = "asdfxC2"
+        val redisKey = "short-url:$shortKey"
 
         every { managedCache.get<String>(redisKey) } returns null
-        every { shortUrlRepository.findByShortUrl(shortenUrl) } returns null
+        every { shortUrlRepository.findByShortKey(shortKey) } returns null
 
         // Act & Assert
         val exception = assertThrows(NotFoundException::class.java) {
-            sut.findByShortUrl(shortenUrl)
+            sut.findByShortKey(shortKey)
         }
-        assertThat(exception.code).isEqualTo(ORIGIN_URL_NOT_FOUND_BY_SHORT_URL.first)
+        assertThat(exception.code).isEqualTo(ORIGIN_URL_NOT_FOUND_BY_SHORT_KEY.first)
         verify {
-            shortUrlRepository.findByShortUrl(shortenUrl)
+            shortUrlRepository.findByShortKey(shortKey)
             managedCache.get<String>(redisKey)
         }
     }

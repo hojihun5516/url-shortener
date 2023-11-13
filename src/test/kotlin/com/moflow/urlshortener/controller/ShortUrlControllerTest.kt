@@ -36,10 +36,10 @@ class ShortUrlControllerTest @Autowired constructor(
     fun `sut return short url when origin url is given`() {
         // Arrange
         val originUrl = "https://google.com"
-        val shortUrl = "asdiew2Z"
-        val shortUrlDto = ShortUrlDto(originUrl, shortUrl)
+        val shortKey = "asdiew2Z"
+        val shortUrlDto = ShortUrlDto(originUrl, shortKey)
         val shortUrlCreateRequest = ShortUrlCreateRequest(originUrl)
-        val shortUrlCreateResponse = ShortUrlCreateResponse(shortUrl)
+        val shortUrlCreateResponse = ShortUrlCreateResponse(shortKey)
 
         every { shortUrlMappingService.mapShortUrl(originUrl) } returns shortUrlDto
 
@@ -51,7 +51,7 @@ class ShortUrlControllerTest @Autowired constructor(
         )
             .andDo(print())
             .andExpect(status().isCreated)
-            .andExpect(jsonPath("$.shortUrl").value(shortUrlCreateResponse.shortUrl))
+            .andExpect(jsonPath("$.shortKey").value(shortUrlCreateResponse.shortKey))
 
         verify {
             shortUrlMappingService.mapShortUrl(originUrl)
@@ -79,20 +79,20 @@ class ShortUrlControllerTest @Autowired constructor(
     @DisplayName("short url을 받아서 origin url로 redirect 한다")
     fun `sut should redirect origin url when short url is given`() {
         // Arrange
-        val shortUrl = "vixen1"
+        val shortKey = "vixen1"
         val originUrl = "https://naver.com"
-        val shortUrlDto = ShortUrlDto(originUrl, shortUrl)
-        every { originUrlFindService.findByShortUrl(shortUrl) } returns shortUrlDto
+        val shortUrlDto = ShortUrlDto(originUrl, shortKey)
+        every { originUrlFindService.findByShortKey(shortKey) } returns shortUrlDto
 
         // Act & Assert
         mockMvc.perform(
-            get("/redirect/$shortUrl")
+            get("/redirect/$shortKey")
         )
             .andDo(print())
             .andExpect(status().is3xxRedirection)
 
         verify {
-            originUrlFindService.findByShortUrl(shortUrl)
+            originUrlFindService.findByShortKey(shortKey)
         }
     }
 }

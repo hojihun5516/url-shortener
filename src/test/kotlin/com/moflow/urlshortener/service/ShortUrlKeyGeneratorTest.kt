@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
-class ShortUrlGeneratorTest(
+class ShortUrlKeyGeneratorTest(
     @MockK private val snowflakeGenerator: SnowflakeGenerator,
     @MockK private val base62Encoder: Base62Encoder,
 ) {
     @InjectMockKs
-    private lateinit var sut: ShortUrlGenerator
+    private lateinit var sut: ShortUrlKeyGenerator
 
     @Test
     fun `sut should generate shortUrl`() {

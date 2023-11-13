@@ -7,7 +7,7 @@ object ShortUrlExtension {
     fun ShortUrl.toShortUrlDto(): ShortUrlDto {
         return ShortUrlDto(
             originUrl = originUrl,
-            shortUrl = shortUrl,
+            shortKey = shortKey,
         )
     }
 }

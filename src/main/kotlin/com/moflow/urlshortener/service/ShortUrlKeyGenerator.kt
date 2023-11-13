@@ -3,7 +3,7 @@ package com.moflow.urlshortener.service
 import org.springframework.stereotype.Component
 
 @Component
-class ShortUrlGenerator(
+class ShortUrlKeyGenerator(
     private val snowflakeGenerator: SnowflakeGenerator,
     private val base62Encoder: Base62Encoder,
 ) {

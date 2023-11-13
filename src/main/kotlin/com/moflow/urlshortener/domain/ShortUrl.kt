@@ -10,7 +10,7 @@ import jakarta.persistence.Id
 class ShortUrl(
     val originUrl: String,
     @Column(unique = true)
-    val shortUrl: String,
+    val shortKey: String,
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,6 @@ class ShortUrl(
     }
 
     override fun toString(): String {
-        return "ShortUrl(id='$id', originUrl=$originUrl, shortUrl=$shortUrl, createdAt=$createdAt, updatedAt=$updatedAt)"
+        return "ShortUrl(id='$id', originUrl=$originUrl, shortKey=$shortKey, createdAt=$createdAt, updatedAt=$updatedAt)"
     }
 }

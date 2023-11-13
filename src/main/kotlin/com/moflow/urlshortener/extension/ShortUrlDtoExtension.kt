@@ -6,7 +6,7 @@ import com.moflow.urlshortener.dto.ShortUrlDto
 object ShortUrlDtoExtension {
     fun ShortUrlDto.toShortUrlCreateResponse(): ShortUrlCreateResponse {
         return ShortUrlCreateResponse(
-            shortUrl = shortUrl,
+            shortKey = shortKey,
         )
     }
 }
