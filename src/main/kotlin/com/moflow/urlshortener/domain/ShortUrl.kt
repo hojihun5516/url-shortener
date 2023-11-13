@@ -14,5 +14,22 @@ class ShortUrl(
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    val id: Long = 0L
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ShortUrl
+
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    override fun toString(): String {
+        return "ShortUrl(id='$id', originUrl=$originUrl, shortUrl=$shortUrl, createdAt=$createdAt, updatedAt=$updatedAt)"
+    }
 }
