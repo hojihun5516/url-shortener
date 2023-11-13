@@ -11,17 +11,17 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class ShortUrlMappingService(
     private val shortUrlFindService: ShortUrlFindService,
-    private val shortUrlGenerator: ShortUrlGenerator,
+    private val shortUrlKeyGenerator: ShortUrlKeyGenerator,
     private val shortUrlRepository: ShortUrlRepository,
 ) {
     fun mapShortUrl(originUrl: String): ShortUrlDto {
         val existsShortUrl = shortUrlFindService.findByOriginUrl(originUrl)
-        if(existsShortUrl !=null ){
+        if (existsShortUrl != null) {
             return existsShortUrl
         }
 
-        val shortenUrl = shortUrlGenerator.generate()
-        val shortUrl = shortUrlRepository.save(ShortUrl(originUrl, shortenUrl))
+        val shortKey = shortUrlKeyGenerator.generate()
+        val shortUrl = shortUrlRepository.save(ShortUrl(originUrl, shortKey))
         return shortUrl.toShortUrlDto()
     }
 }

@@ -30,7 +30,7 @@ class ShortUrlController(
     @GetMapping("/redirect/{shortUrl}")
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     fun redirect(@PathVariable shortUrl: String): RedirectView {
-        val shortUrlDto = originUrlFindService.findByShortUrl(shortUrl)
+        val shortUrlDto = originUrlFindService.findByShortKey(shortUrl)
         val redirectView = RedirectView()
         redirectView.url = shortUrlDto.originUrl
         return redirectView;

@@ -19,11 +19,11 @@ class ShortUrlFindServiceTest(
     private lateinit var sut: ShortUrlFindService
 
     @Test
-    fun `sut should return short url dto when short url is exists`() {
+    fun `sut should return short url dto when short key is exists`() {
         // Arrange
         val originUrl = "https://ASDF.com"
-        val shortenUrl = "asdfxC2"
-        val shortUrl = ShortUrl(originUrl = originUrl, shortUrl = shortenUrl)
+        val shortKey = "asdfxC2"
+        val shortUrl = ShortUrl(originUrl = originUrl, shortKey = shortKey)
         every { shortUrlRepository.findByOriginUrl(originUrl) } returns shortUrl
 
         // Act
@@ -32,7 +32,7 @@ class ShortUrlFindServiceTest(
         // Assert
         assertThat(actual)
             .hasFieldOrPropertyWithValue("originUrl", originUrl)
-            .hasFieldOrPropertyWithValue("shortUrl", shortenUrl)
+            .hasFieldOrPropertyWithValue("shortKey", shortKey)
 
         verify {
             shortUrlRepository.findByOriginUrl(originUrl)
@@ -40,7 +40,7 @@ class ShortUrlFindServiceTest(
     }
 
     @Test
-    fun `sut should return null when short url is not exists`() {
+    fun `sut should return null when short key is not exists`() {
         // Arrange
         val originUrl = "https://ASDF.com"
         every { shortUrlRepository.findByOriginUrl(originUrl) } returns null

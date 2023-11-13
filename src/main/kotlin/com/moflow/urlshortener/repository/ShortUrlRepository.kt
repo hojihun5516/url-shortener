@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ShortUrlRepository : JpaRepository<ShortUrl, Long> {
     fun findByOriginUrl(originUrl: String): ShortUrl?
-    fun findByShortUrl(shortUrl: String): ShortUrl?
+    fun findByShortKey(shortKey: String): ShortUrl?
 }
