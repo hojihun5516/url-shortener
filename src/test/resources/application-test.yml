@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: url-shortener
+    data-center-id: 00001
+    server-id: 00001
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  datasource:
+    url: jdbc:h2:mem:test;MODE=MYSQL
+    username: admin
+    password: 0000
+    jpa:
+      open-in-view: false
+      hibernate:
+        ddl-auto: create-drop # tobe validate
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL8Dialect
+          format_sql: true

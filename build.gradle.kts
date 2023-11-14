@@ -41,7 +41,11 @@ dependencies {
 	testImplementation("com.ninja-squad:springmockk:4.0.2")
 	testImplementation("io.mockk:mockk:1.13.2")
 	testRuntimeOnly("com.h2database:h2")
+	testImplementation("it.ozimov:embedded-redis:0.7.3") {
+		exclude("org.slf4j", "slf4j-simple")
+	}
 }
+
 jacoco {
 	toolVersion = "0.8.11"
 }
