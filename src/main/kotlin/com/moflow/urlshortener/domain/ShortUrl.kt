@@ -8,6 +8,7 @@ import jakarta.persistence.Id
 
 @Entity(name = "shorten_url")
 class ShortUrl(
+    @Column(unique = true)
     val originUrl: String,
     @Column(unique = true)
     val shortKey: String,

@@ -31,6 +31,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("com.h2database:h2:2.2.224") // docker로 mysql 띄우기 전 임시 db
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.redisson:redisson-spring-boot-starter:3.23.5")
+
 	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
