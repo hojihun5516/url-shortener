@@ -25,6 +25,6 @@ class SnowflakeGenerator(
     companion object {
         private const val RADIX = 2
         private const val SERIAL_NUMBER_REDIS_KEY = "snowflake-serial"
-        private const val SIGN_BIT = "1"
+        private const val SIGN_BIT = "0"
     }
 }
