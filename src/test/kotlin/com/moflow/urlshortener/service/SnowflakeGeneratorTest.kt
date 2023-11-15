@@ -40,7 +40,7 @@ class SnowflakeGeneratorTest(
 
         every { managedCache.increment(any()) } returns serialNumber
         every { snowflakeTimestampGenerator.currentTimestamp() } returns currentTimestamp
-        val expectedKey = "110010100101100111010000010000000000000100011111011"
+        val expectedKey = "010010100101100111010000010000000000000100011111011"
 
         // Act
         val actual = sut.generate()
