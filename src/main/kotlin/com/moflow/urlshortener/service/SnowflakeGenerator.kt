@@ -16,11 +16,14 @@ class SnowflakeGenerator(
     private val serverId: String,
 ) {
     fun generate(): String {
-        val serialNumber = managedCache.increment(appName + SERIAL_NUMBER_REDIS_KEY).toString(RADIX)
+        val serialNumberKey = getSerialNumberKey()
+        val serialNumber = managedCache.increment(serialNumberKey).toString(RADIX)
         val currentTimestamp = snowflakeTimestampGenerator.currentTimestamp().toString(RADIX)
         val snowflakeKey = SIGN_BIT + currentTimestamp + dataCenterId + serverId + serialNumber
         return snowflakeKey
     }
+
+    fun getSerialNumberKey() = "$appName-$SERIAL_NUMBER_REDIS_KEY-$serverId"
 
     companion object {
         private const val RADIX = 2

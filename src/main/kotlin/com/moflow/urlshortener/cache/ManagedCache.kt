@@ -32,6 +32,7 @@ class ManagedCache(
         val incrementedValue = valueOperations.increment(key, delta)
         return incrementedValue?.toInt() ?: 1
     }
+    fun delete(key: String): Boolean = redisTemplate.delete(key)
 
     data class CacheValue<T>(val value: T)
 }
