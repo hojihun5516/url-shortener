@@ -48,8 +48,21 @@ class SnowflakeGeneratorTest(
         // Assert
         assertThat(actual).isEqualTo(expectedKey)
         verify {
-            managedCache.increment("$appName${SERIAL_NUMBER_REDIS_KEY}")
+            managedCache.increment("$appName-$SERIAL_NUMBER_REDIS_KEY-$serverId")
             snowflakeTimestampGenerator.currentTimestamp()
         }
+    }
+
+    @Test
+    fun `sut return serial number key`() {
+        // Arrange
+        val SERIAL_NUMBER_REDIS_KEY = "snowflake-serial"
+        val expected = "$appName-$SERIAL_NUMBER_REDIS_KEY-$serverId"
+
+        // Act
+        val actual = sut.getSerialNumberKey()
+
+        // Assert
+        assertThat(actual).isEqualTo(expected)
     }
 }
