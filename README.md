@@ -1,10 +1,18 @@
 # 단축 URL 생성기 프로젝트
 
 ## 목차
+- [How To Run](#how-to-run)
 - [기능](#기능)
 - [아키텍처 및 설계](#아키텍처-및-설계)
 - [Short Key 생성 과정](#Short-Key-생성-과정)
-- [How To Run](#how-to-run)
+
+## How to run
+```
+# redis server run 
+docker-compose up -d
+
+# spring boot application run
+```
 
 ## 기능
 1. 원본 url을 받아서 단축 url로 변환 합니다.
@@ -86,11 +94,3 @@ sequenceDiagram
 ### 2. Base62 Encoding
 - snowflake를 통해 만들어진 64bit의 값을 이용하여 [0-9a-zA-Z] 패턴을 가진 8자 이내의 단축 URL을 생성합니다.
 - '+'와 '/'는 일부 URL에서 문제를 일으킬 수 있기 때문에 **Base62**를 선택했습니다.
-
-## How to run
-```
-# redis server run 
-docker-compose up -d
-
-# spring boot application run
-```
